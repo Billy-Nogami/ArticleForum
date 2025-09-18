@@ -1,31 +1,32 @@
 scalar Time
 
-type Post{
-
-    id: ID:
-    title: String!
-    content: String!
-    commentsEnabled: Boolean!
-    createdAt: Time! 
-
+type Post {
+  id: ID!
+  title: String!
+  content: String!
+  commentsEnabled: Boolean!
+  createdAt: Time!
 }
 
-type Comment{
-    id: ID!
-    postID: ID!
-    parentID: ID
-    content: String!
-    createdAt: Time!
-
+type Comment {
+  id: ID!
+  postID: ID!
+  parentID: ID
+  content: String!
+  createdAt: Time!
 }
 
-type Query{
-    posts: [Post!]!
-    post(id: ID!): Post
-    comments(postID: ID!, limit: Int, offset: Int!): [Comment!]!
-
+type Query {
+  posts: [Post!]!
+  post(id: ID!): Post
+  comments(postID: ID!, limit: Int!, offset: Int!): [Comment!]!
 }
 
 type Mutation {
-    
+  createPost(title: String!, content: String!, commentsEnabled: Boolean!): Post!
+  createComment(postID: ID!, parentID: ID, content: String!): Comment!
+}
+
+type Subscription {
+  commentAdded(postID: ID!): Comment!
 }

@@ -1,0 +1,18 @@
+schema:
+  - internal/graph/schema.graphqls
+
+exec:
+  filename: internal/graph/generated.go
+  package: graph
+
+model:
+  filename: internal/graph/model/models_gen.go
+  package: model
+
+resolver:
+  filename: internal/graph/resolver.go
+  type: Resolver
+
+models:
+  Time:
+    model: github.com/99designs/gqlgen/graphql.Time
