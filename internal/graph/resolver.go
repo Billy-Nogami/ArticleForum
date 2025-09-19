@@ -4,39 +4,120 @@ package graph
 
 import (
 	"ArticleForum/internal/graph/model"
+	"ArticleForum/internal/storage/memory"
 	"context"
 )
 
-type Resolver struct{}
+type Resolver struct {
+	storage *memory.MemoryStorage
+}
+
+func NewResolver() *Resolver {
+	return &Resolver{
+		storage: memory.NewMemoryStorage(),
+	}
+}
 
 // CreatePost is the resolver for the createPost field.
 func (r *mutationResolver) CreatePost(ctx context.Context, title string, content string, commentsEnabled bool) (*model.Post, error) {
-	panic("not implemented")
+	post, err := r.storage.CreatePost(ctx, title, content, commentsEnabled)
+	if err != nil {
+		return nil, err
+	}
+
+	return &model.Post{
+		ID:              post.ID,
+		Title:           post.Title,
+		Content:         post.Content,
+		CommentsEnabled: post.CommentsEnabled,
+		CreatedAt:       post.CreatedAt,
+	}, nil
 }
 
 // CreateComment is the resolver for the createComment field.
 func (r *mutationResolver) CreateComment(ctx context.Context, postID string, parentID *string, content string) (*model.Comment, error) {
-	panic("not implemented")
+	comment, err := r.storage.CreateComment(ctx, postID, parentID, content)
+	if err != nil {
+		return nil, err
+	}
+
+	if comment == nil {
+		return nil, nil // Пост не найден или комментарии запрещены
+	}
+
+	return &model.Comment{
+		ID:        comment.ID,
+		PostID:    comment.PostID,
+		ParentID:  comment.ParentID,
+		Content:   comment.Content,
+		CreatedAt: comment.CreatedAt,
+	}, nil
 }
 
 // Posts is the resolver for the posts field.
 func (r *queryResolver) Posts(ctx context.Context) ([]*model.Post, error) {
-	panic("not implemented")
+	posts, err := r.storage.GetAllPosts(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	var result []*model.Post
+	for _, post := range posts {
+		result = append(result, &model.Post{
+			ID:              post.ID,
+			Title:           post.Title,
+			Content:         post.Content,
+			CommentsEnabled: post.CommentsEnabled,
+			CreatedAt:       post.CreatedAt,
+		})
+	}
+	return result, nil
 }
 
 // Post is the resolver for the post field.
 func (r *queryResolver) Post(ctx context.Context, id string) (*model.Post, error) {
-	panic("not implemented")
+	post, err := r.storage.GetPost(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+
+	if post == nil {
+		return nil, nil
+	}
+
+	return &model.Post{
+		ID:              post.ID,
+		Title:           post.Title,
+		Content:         post.Content,
+		CommentsEnabled: post.CommentsEnabled,
+		CreatedAt:       post.CreatedAt,
+	}, nil
 }
 
 // Comments is the resolver for the comments field.
 func (r *queryResolver) Comments(ctx context.Context, postID string, limit int, offset int) ([]*model.Comment, error) {
-	panic("not implemented")
+	comments, err := r.storage.GetComments(ctx, postID, limit, offset)
+	if err != nil {
+		return nil, err
+	}
+
+	var result []*model.Comment
+	for _, comment := range comments {
+		result = append(result, &model.Comment{
+			ID:        comment.ID,
+			PostID:    comment.PostID,
+			ParentID:  comment.ParentID,
+			Content:   comment.Content,
+			CreatedAt: comment.CreatedAt,
+		})
+	}
+	return result, nil
 }
 
 // CommentAdded is the resolver for the commentAdded field.
 func (r *subscriptionResolver) CommentAdded(ctx context.Context, postID string) (<-chan *model.Comment, error) {
-	panic("not implemented")
+	ch := make(chan *model.Comment, 1)
+	return ch, nil
 }
 
 // Mutation returns MutationResolver implementation.
