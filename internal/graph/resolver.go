@@ -95,8 +95,18 @@ func (r *queryResolver) Post(ctx context.Context, id string) (*model.Post, error
 }
 
 // Comments is the resolver for the comments field.
-func (r *queryResolver) Comments(ctx context.Context, postID string, limit int, offset int) ([]*model.Comment, error) {
-	comments, err := r.storage.GetComments(ctx, postID, limit, offset)
+func (r *queryResolver) Comments(ctx context.Context, postID string, limit *int, offset *int) ([]*model.Comment, error) {
+	actualLimit := 10
+	if limit != nil {
+		actualLimit = *limit
+	}
+
+	actualOffset := 0
+	if offset != nil {
+		actualOffset = *offset
+	}
+
+	comments, err := r.storage.GetComments(ctx, postID, actualLimit, actualOffset)
 	if err != nil {
 		return nil, err
 	}
@@ -132,3 +142,20 @@ func (r *Resolver) Subscription() SubscriptionResolver { return &subscriptionRes
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
 type subscriptionResolver struct{ *Resolver }
+
+// !!! WARNING !!!
+// The code below was going to be deleted when updating resolvers. It has been copied here so you have
+// one last chance to move it out of harms way if you want. There are two reasons this happens:
+//  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
+//    it when you're done.
+//  - You have helper methods in this file. Move them out to keep these resolver files clean.
+/*
+	type Resolver struct {
+	storage *memory.MemoryStorage
+}
+func NewResolver() *Resolver {
+	return &Resolver{
+		storage: memory.NewMemoryStorage(),
+	}
+}
+*/
