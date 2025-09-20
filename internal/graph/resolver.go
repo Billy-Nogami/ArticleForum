@@ -4,17 +4,17 @@ package graph
 
 import (
 	"ArticleForum/internal/graph/model"
-	"ArticleForum/internal/storage/memory"
+	"ArticleForum/internal/storage"
 	"context"
 )
 
 type Resolver struct {
-	storage *memory.MemoryStorage
+	storage storage.Storage
 }
 
-func NewResolver() *Resolver {
+func NewResolver(storage storage.Storage) *Resolver {
 	return &Resolver{
-		storage: memory.NewMemoryStorage(),
+		storage: storage,
 	}
 }
 

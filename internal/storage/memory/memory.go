@@ -2,6 +2,7 @@ package memory
 
 import (
 	"ArticleForum/internal/domain"
+	"ArticleForum/internal/storage"
 	"context"
 	"sync"
 	"time"
@@ -105,3 +106,5 @@ func (s *MemoryStorage) GetComments(ctx context.Context, postID string, limit, o
 
 	return comments[offset:end], nil
 }
+
+var _ storage.Storage = (*MemoryStorage)(nil)
