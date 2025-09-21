@@ -11,9 +11,11 @@ import (
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
+	"github.com/joho/godotenv"
 )
 
 func main() {
+	godotenv.Load()
 	cfg := config.Load()
 
 	var store storage.Storage

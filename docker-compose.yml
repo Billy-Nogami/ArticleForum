@@ -1,0 +1,15 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - STORAGE_TYPE=memory
+    networks:
+      - articleforum-network
+    restart: unless-stopped
+
+networks:
+  articleforum-network:
+    driver: bridge
