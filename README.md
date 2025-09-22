@@ -51,32 +51,6 @@ docker run -d \
   articleforum ./articleforum -storage memory
 ```
 
-### Вариант 2: Локальная разработка
-
-1. Клонирование и настройка
-```bash
-git clone <your-repository-url>
-cd ArticleForum
-go mod download
-```
-
-2. Запуск с PostgreSQL
-```bash
-# Запуск PostgreSQL (если еще не запущен)
-docker run -d \
-  --name postgres \
-  -e POSTGRES_DB=articleforum \
-  -e POSTGRES_USER=postgres \
-  -e POSTGRES_PASSWORD=12345678 \
-  -p 5432:5432 \
-  postgres:13
-
-# Применение миграций
-goose -dir migrations/goose postgres "user=postgres password=12345678 dbname=articleforum host=localhost port=5432 sslmode=disable" up
-
-# Запуск приложения
-go run ./cmd/server -storage postgres -postgres-dsn "postgres://postgres:12345678@localhost:5432/articleforum?sslmode=disable"
-```
 
 3. Запуск с хранением в памяти
 ```bash
@@ -111,5 +85,13 @@ http://localhost:8080
 ```graphql
 mutation {
   createPost(
-    title: "My First Post"
-    content: "This is the content of my post"
+    title: "Тестовый пост", 
+    content: "Содержание тестового поста", 
+    commentsEnabled: true
+  ) {
+    id
+    title
+    commentsEnabled
+    createdAt
+  }
+}
