@@ -11,6 +11,7 @@
 ```bash
 git clone https://github.com/Billy-Nogami/ArticleForum.git
 cd ArticleForum
+go mod tidy
 ```
 
 2. Запуск с PostgreSQL (продакшен)
