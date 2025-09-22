@@ -9,7 +9,7 @@
 
 1. Клонирование репозитория
 ```bash
-git clone <your-repository-url>
+git clone https://github.com/Billy-Nogami/ArticleForum.git
 cd ArticleForum
 ```
 
