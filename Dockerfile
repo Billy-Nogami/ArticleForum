@@ -13,7 +13,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o articleforum ./cmd/server
 
 FROM alpine:latest
 
-RUN apk add --no-cache ca-certificates
+RUN apk add --no-cache ca-certificates postgresql-client
 
 RUN adduser -D -g '' appuser
 
@@ -21,10 +21,12 @@ WORKDIR /app
 
 COPY --from=builder /app/articleforum .
 
+COPY --from=builder /app/migrations ./migrations
+
 RUN chown -R appuser:appuser /app
 
 USER appuser
 
 EXPOSE 8080
 
-CMD ["./articleforum", "-storage", "memory"]
+CMD ["./articleforum", "-storage", "postgres"]
