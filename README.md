@@ -95,3 +95,55 @@ mutation {
     createdAt
   }
 }
+```
+**Комментарии поста**
+```graphql
+query {
+  comments(postID: "5a1e2aaa-34fa-430a-96e9-72f2817cb720", limit: 10, offset: 0) {
+    id
+    postID
+    content
+    createdAt
+  }
+}
+```
+
+**Создать комментарий**
+```graphql
+mutation {
+  createComment(
+    postID: "5a1e2aaa-34fa-430a-96e9-72f2817cb720", 
+    content: "Это мой первый комментарий!"
+  ) {
+    id
+    postID
+    content
+    createdAt
+  }
+}
+```
+
+**Вернуть комментарии поста**
+```graphql
+query {
+  comments(postID: "ID_ВАШЕГО_ПОСТА", limit: 10, offset: 0) {
+    id
+    postID
+    content
+    createdAt
+  }
+}
+```
+
+**Вернуть посты**
+```graphql
+query {
+  posts {
+    id
+    title
+    content
+    commentsEnabled
+    createdAt
+  }
+}
+```
